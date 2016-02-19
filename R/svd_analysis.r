@@ -31,8 +31,6 @@ get_var_names = function(pdata) {
 #' (significance).
 #'
 #' @export
-#' @importFrom dplyr %>% mutate_
-#' @importFrom tidyr gather_
 svd_analysis = function(values, pdata) {
   sv_decomp = svd(values)
   var_explained = sv_decomp$d ^ 2 / sum(sv_decomp$d ^ 2)
@@ -44,19 +42,7 @@ svd_analysis = function(values, pdata) {
     Var = var_explained
   )
 
-  var_names = get_var_names(pdata)
-
-  fits = lapply(var_names, function(xx) lm(sv_decomp$v ~ pdata[[xx]]))
-  sfits = lapply(fits, summary)
-  pvalues = lapply(sfits, function(xx) sapply(xx, function(yy) get_p_value(yy$fstatistic)))
-  pvalues_matrix = as.matrix(na.omit(t(as.data.frame(pvalues))))
-  colnames(pvalues_matrix) = component_names
-
-  significance_data = pvalues %>%
-    as.data.frame() %>%
-    mutate_('PC' = ~ component_names) %>%
-    gather_('Variable', 'P_Value', var_names) %>%
-    mutate_('Sig' = ~ cut_pvalues(P_Value))
+  significance_data = compute_significance_data(sv_decomp$v, pdata, component_names)
 
   result = list(
     variance_explained = variance_explained_data,

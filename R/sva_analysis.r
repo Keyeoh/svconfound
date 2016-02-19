@@ -10,28 +10,15 @@
 #' analysis tests (significance), and the surrogate variables obtained by sva (surrogates).
 #' @export
 #' @importFrom sva num.sv sva
-#' @importFrom dplyr mutate_
-#' @importFrom tidyr gather_
 sva_analysis = function(values, pdata, main_formula, vfilter = 10000) {
   mod = model.matrix(main_formula, data = pdata)
   num_sv = num.sv(values, mod, vfilter = vfilter)
   svs = sva(values, mod, n.sv = num_sv)
 
-  var_names = get_var_names(pdata)
   sv_names = paste0('SV-', 1:(svs$n.sv))
   sv_names = factor(sv_names, levels = sv_names)
 
-  fits = lapply(var_names, function(xx) lm(svs$sv ~ pdata[[xx]]))
-  sfits = lapply(fits, summary)
-  pvalues = lapply(sfits, function(xx) sapply(xx, function(yy) get_p_value(yy$fstatistic)))
-  pvalues_matrix = as.matrix(na.omit(t(as.data.frame(pvalues))))
-  colnames(pvalues_matrix) = sv_names
-
-  significance_data = pvalues %>%
-    as.data.frame() %>%
-    mutate_('PC' = sv_names) %>%
-    gather_('Variable', 'P_Value', var_names) %>%
-    mutate_('Sig' = ~ cut_pvalues(P_Value))
+  significance_data = compute_significance_data(svs$sv, pdata, sv_names)
 
   colnames(svs$sv) = gsub('-', '_', sv_names)
 
