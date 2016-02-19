@@ -7,7 +7,7 @@ Author: Gustavo Fernández Bayón
 Maintainer: Gustavo Fernández Bayón <fernandezgustavo@uniovi.es>
 Description: This package implements a simple strategy for analyzing confounding
     variation on datasets. The strategy is mostly based on Andrew Teschendorff's
-    book chapter REF_HERE.
+    book chapter in "Computational and Statistical Epigenomics".
 License: Artistic-2.0
 LazyData: TRUE
 RoxygenNote: 5.0.1
