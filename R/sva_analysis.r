@@ -10,7 +10,12 @@
 #' analysis tests (significance), and the surrogate variables obtained by sva (surrogates).
 #' @export
 #' @importFrom sva num.sv sva
-sva_analysis = function(values, pdata, main_formula, vfilter = 10000) {
+sva_analysis = function(values, pdata, main_formula, vfilter = NULL) {
+
+  if (!is.null(vfilter)) {
+    vfilter = min(vfilter, nrow(values))
+  }
+
   mod = model.matrix(main_formula, data = pdata)
   num_sv = num.sv(values, mod, vfilter = vfilter)
   svs = sva(values, mod, n.sv = num_sv)

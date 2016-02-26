@@ -4,7 +4,7 @@
 \alias{sva_analysis}
 \title{Perform SVA confounder analysis}
 \usage{
-sva_analysis(values, pdata, main_formula, vfilter = 10000)
+sva_analysis(values, pdata, main_formula, vfilter = NULL)
 }
 \arguments{
 \item{values}{A matrix containing the data to analyze. Rows are for variables and columns for samples.}

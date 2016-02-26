@@ -36,7 +36,14 @@ perform_analysis = function(values, pdata, model, fixed_vars = NULL) {
   if (!is.null(fixed_vars)) {
     batch_variable = Reduce(function(xx, yy) paste(xx, yy, sep = '_'),
                             pdata[, fixed_vars, drop = FALSE])
-    fixed_values = ComBat(values, batch_variable)
+
+    if (any(table(batch_variable) <= 1)) {
+      warning('Some batches do not have at least two samples. Bypassing ComBat execution.')
+      fixed_values = values
+    } else {
+      fixed_values = ComBat(values, batch_variable)
+      results$fixed_svd_results = svd_analysis(fixed_values, pdata)
+    }
   } else {
     fixed_values = values
   }
@@ -87,6 +94,16 @@ if(!interactive()) {
               file = paste0(args$prefix, '.svd_significance.tsv'),
               sep = '\t', dec = '.', quote = FALSE, col.names = TRUE, row.names = FALSE)
 
+  if (!is.null(analysis_results$fixed_svd_results)) {
+    write.table(analysis_results$fixed_svd_results$variance_explained,
+                file = paste0(args$prefix, '.fixed.variance_explained.tsv'),
+                sep = '\t', dec = '.', quote = FALSE, col.names = TRUE, row.names = FALSE)
+
+    write.table(analysis_results$fixed_svd_results$significance,
+                file = paste0(args$prefix, '.fixed.svd_significance.tsv'),
+                sep = '\t', dec = '.', quote = FALSE, col.names = TRUE, row.names = FALSE)
+  }
+
   write.table(analysis_results$sva_results$significance,
               file = paste0(args$prefix, '.sva_significance.tsv'),
               sep = '\t', dec = '.', quote = FALSE, col.names = TRUE, row.names = FALSE)
@@ -98,6 +115,16 @@ if(!interactive()) {
   svg(paste0(args$prefix, '.svd_significance.svg'), width = 7, height = 7)
   plot(plot_significance(analysis_results$svd_results))
   dev.off()
+
+  if (!is.null(analysis_results$fixed_svd_results)) {
+    svg(paste0(args$prefix, '.fixed.variance_explained.svg'), width = 7, height = 7)
+    plot(plot_svd_scree(analysis_results$fixed_svd_results))
+    dev.off()
+
+    svg(paste0(args$prefix, '.fixed.svd_significance.svg'), width = 7, height = 7)
+    plot(plot_significance(analysis_results$fixed_svd_results))
+    dev.off()
+  }
 
   svg(paste0(args$prefix, '.sva_significance.svg'), width = 7, height = 7)
   plot(plot_significance(analysis_results$sva_results))
