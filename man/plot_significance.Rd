@@ -7,7 +7,8 @@
 plot_significance(result)
 }
 \arguments{
-\item{result}{A list containing the results from the confounder analysis function.}
+\item{result}{A list containing the results from the confounder analysis
+function.}
 }
 \value{
 A ggplot2 plot.

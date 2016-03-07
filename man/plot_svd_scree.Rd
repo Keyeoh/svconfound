@@ -7,7 +7,8 @@
 plot_svd_scree(svd_result)
 }
 \arguments{
-\item{svd_result}{A list containing the result from the svd_analysis function.}
+\item{svd_result}{A list containing the result from the svd_analysis
+function.}
 }
 \value{
 A ggplot2 plot.

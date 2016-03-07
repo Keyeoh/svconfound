@@ -7,7 +7,8 @@
 get_p_value(fstat)
 }
 \arguments{
-\item{fstat}{A numeric vector of length three obtained from a linear model fit.}
+\item{fstat}{A numeric vector of length three obtained from a linear model
+fit.}
 }
 \value{
 The computed p-value.

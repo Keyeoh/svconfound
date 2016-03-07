@@ -7,7 +7,8 @@
 compute_significance_data(values, pdata, component_names)
 }
 \arguments{
-\item{values}{A matrix containing either principal components or surrogate variables.}
+\item{values}{A matrix containing either principal components or surrogate
+variables.}
 
 \item{pdata}{A data.frame containing the phenotypical data for the samples.}
 

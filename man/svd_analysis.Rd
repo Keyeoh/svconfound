@@ -7,14 +7,15 @@
 svd_analysis(values, pdata)
 }
 \arguments{
-\item{values}{A matrix of numerical values. Rows represent variables and columns samples.}
+\item{values}{A matrix of numerical values. Rows represent variables and
+columns samples.}
 
 \item{pdata}{A data.frame containing the phenotypical data for the samples.}
 }
 \value{
-A list containing the proportion of variance explained by the principal components
-(variance_explained) and a data.frame representing the results from the association analysis
-(significance).
+A list containing the proportion of variance explained by the
+principal components (variance_explained) and a data.frame representing the
+results from the association analysis (significance).
 }
 \description{
 Compute SVD confounder analysis.

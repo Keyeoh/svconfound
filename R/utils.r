@@ -10,7 +10,8 @@ cut_pvalues = function(p_values) {
 
 #' Compute associations with phenotypical variables.
 #'
-#' @param values A matrix containing either principal components or surrogate variables.
+#' @param values A matrix containing either principal components or surrogate
+#' variables.
 #' @param pdata A data.frame containing the phenotypical data for the samples.
 #' @param component_names A character vector containing the component names.
 #'
@@ -22,7 +23,10 @@ compute_significance_data = function (values, pdata, component_names) {
 
   fits = lapply(var_names, function(xx) lm(values ~ pdata[[xx]]))
   sfits = lapply(fits, summary)
-  pvalues = lapply(sfits, function(xx) sapply(xx, function(yy) get_p_value(yy$fstatistic)))
+  pvalues = lapply(
+    sfits,
+    function(xx) sapply(xx, function(yy) get_p_value(yy$fstatistic))
+    )
   pvalues_matrix = as.matrix(na.omit(t(as.data.frame(pvalues))))
   colnames(pvalues_matrix) = component_names
 
