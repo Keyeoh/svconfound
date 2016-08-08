@@ -4,8 +4,9 @@
 #'
 #' @return A factor containing the cut categories.
 cut_pvalues = function(p_values) {
-  result = cut(p_values, c(0, 1e-10, 1e-5, 0.001, 0.05, Inf),
-               labels = c('< 1e-10', '< 1e-5', '< 0.001', '< 0.05', 'NS'))
+  result = cut(p_values, c(0, 1e-10, 1e-5, 0.001, 0.01, 0.05, Inf),
+               labels = c('< 1e-10', '< 1e-5', '< 0.001', '< 0.01', '< 0.05',
+                          'NS'))
 }
 
 
