@@ -92,6 +92,7 @@ svd_analysis = function(values, pdata, center = T, scale = F,
                         rgSet = NULL,
                         method = c('lm', 'kruskal')) {
 
+  # Rows label samples, Columns features/variables.
   values = scale(values, center = center, scale = scale)
 
   sv_decomp = svd(values)
@@ -133,13 +134,17 @@ svd_analysis = function(values, pdata, center = T, scale = F,
                                         levels = unique(significance_data$Variable))
   }
 
-  max_col = 5000
-  if (ncol(values) > max_col) {
-    # select the 10000 first elements with more variance
-    row_v = sort(apply(values, 2, var), decreasing = T)
-    dim_pca = isva::EstDimRMT(values[, names(row_v[1:max_col])])$dim
+  max_samples = 5000
+  # the matrix row values indicates the samples and the columns the variables
+  if (nrow(values) > max_samples) {
+    # select the 5000 first samples
+    # warning!! we are removing samples (the original values matrix has samples like rows
+    # and variables like colums)
+    # Rows label features/variables, Columns samples.
+    dim_pca = isva::EstDimRMT(t(values[1:max_samples, ]))$dim
   } else {
-    dim_pca = isva::EstDimRMT(values)$dim
+    # Rows label features/variables, Columns samples.
+    dim_pca = isva::EstDimRMT(t(values))$dim
   }
 
   result = list(
