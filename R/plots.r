@@ -41,7 +41,7 @@ screeplot.SVDAnalysis = function(result) {
 #' @importFrom ggplot2 ggplot aes_string geom_tile scale_fill_manual
 #' scale_color_manual xlab theme_bw theme geom_vline
 plot_significance = function(result) {
-  colors_palette = c('darkred', 'red', 'orange', 'yellow', 'pink', 'transparent')
+  colors_palette = c('darkred', 'red', 'orange', 'gold', 'pink', 'transparent')
   result = ggplot(result$significance, aes_string(x = 'PC', y = 'Variable')) +
     geom_vline(xintercept = result$limited_significant_PC, color = 'grey') +
     scale_x_discrete() +
