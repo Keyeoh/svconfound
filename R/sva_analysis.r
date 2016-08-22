@@ -36,4 +36,7 @@ sva_analysis = function(values, pdata, main_formula, vfilter = NULL) {
     significance = significance_data,
     surrogates = svs$sv
   )
+
+  class(result) = append(class(result), 'SVAAnalysis')
+  return(result)
 }

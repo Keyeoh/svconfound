@@ -3,6 +3,7 @@
 export(sva_analysis)
 export(svd_analysis)
 export(plot.SVDAnalysis)
+export(plot.SVAAnalysis)
 export(screeplot.SVDAnalysis)
 importFrom(dplyr,"%>%")
 importFrom(dplyr,mutate_)

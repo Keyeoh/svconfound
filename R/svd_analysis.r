@@ -155,7 +155,5 @@ svd_analysis = function(values, pdata, center = T, scale = F,
   )
 
   class(result) = append(class(result), 'SVDAnalysis')
-
-  # return(structure(result, class = 'SVDAnalysis'))
   return(result)
 }

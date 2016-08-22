@@ -32,6 +32,7 @@ screeplot.SVDAnalysis = function(result) {
   return(plot_svd_scree(result))
 }
 
+
 #' Plot results of confounder analysis.
 #'
 #' @param result A list containing the results from the confounder analysis
@@ -71,3 +72,15 @@ plot_significance = function(result) {
 plot.SVDAnalysis = function(result) {
   return(plot_significance(result))
 }
+
+#' Plot results of sv analysis.
+#'
+#' @param result A list containing the results from the sv analysis
+#' function.
+#'
+#' @return A ggplot2 plot.
+plot.SVAAnalysis = function(result) {
+  result$limited_significant_PC = result$num_sv
+  return(plot_significance(result))
+}
+
