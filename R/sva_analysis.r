@@ -14,7 +14,8 @@
 #'
 #' @export
 #' @importFrom sva num.sv sva
-sva_analysis = function(values, pdata, main_formula, vfilter = NULL) {
+sva_analysis = function(values, pdata, main_formula, vfilter = NULL,
+                        rgSet = NULL) {
 
   if (!is.null(vfilter)) {
     vfilter = min(vfilter, nrow(values))
@@ -29,11 +30,28 @@ sva_analysis = function(values, pdata, main_formula, vfilter = NULL) {
 
   significance_data = compute_significance_data(svs$sv, pdata, sv_names)
 
+  data_control_values = get_control_variables(rgSet)
+  sig_data_rgset = NULL
+
+  if (!is.null(data_control_values)) {
+    var_names = colnames(data_control_values)
+    names(var_names) = var_names
+    sig_data_rgset = compute_significance_data_var_names(svs$sv,
+                                                         data_control_values,
+                                                         sv_names,
+                                                         var_names)
+    significance_data = rbind(significance_data, sig_data_rgset)
+    # for sorting elements
+    significance_data$Variable = factor(significance_data$Variable,
+                                        levels = unique(significance_data$Variable))
+  }
+
   colnames(svs$sv) = gsub('-', '_', sv_names)
 
   result = list(
     num_sv = num_sv,
     significance = significance_data,
+    significance_control = sig_data_rgset,
     surrogates = svs$sv
   )
 
