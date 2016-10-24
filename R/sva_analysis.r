@@ -25,7 +25,10 @@ sva_analysis = function(values, pdata, main_formula,
   }
 
   mod = model.matrix(main_formula, data = pdata)
-  mod0 = model.matrix(null_formula, data = pdata)
+  mod0 = NULL
+  if (!is.null(null_formula)) {
+    mod0 = model.matrix(null_formula, data = pdata)
+  }
   num_sv = num.sv(values, mod = mod, vfilter = vfilter)
   svs = sva(values, mod = mod, mod0 = mod0, n.sv = num_sv)
 
