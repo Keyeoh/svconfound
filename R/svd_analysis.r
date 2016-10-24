@@ -5,7 +5,11 @@
 #'
 #' @return The computed p-value.
 get_p_value = function(fstat) {
-  p_value = 1 - pf(fstat['value'], fstat['numdf'], fstat['dendf'])
+  if (is.numeric(fstat['value'])) {
+    p_value = 1 - pf(fstat['value'], fstat['numdf'], fstat['dendf'])
+  } else {
+    p_value = 1
+  }
   return(p_value)
 }
 
@@ -27,8 +31,8 @@ get_var_names = function(pdata) {
 
 #' Compute SVD confounder analysis.
 #'
-#' @param values A matrix of numerical values. Rows represent variables and
-#' columns samples.
+#' @param values A matrix of numerical values. Rows represent samples and
+#' columns variables.
 #' @param pdata A data.frame containing the phenotypical data for the samples.
 #' #' @param center A logical value indicating whether the variables should be shifted to
 #' be zero centered. Alternately, a vector of length equal the number of columns of x
@@ -111,6 +115,9 @@ svd_analysis = function(values, pdata, center = T, scale = F,
 
   result = list(
     variance_explained = variance_explained_data,
+    center = center,
+    scale = scale,
+    method = method,
     significance = significance_data,
     significance_control = sig_data_rgset,
     limited_significant_PC = dim_pca
