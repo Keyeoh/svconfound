@@ -18,6 +18,7 @@ cut_pvalues = function(p_values) {
 #' @return A tbl_df with the results of the association tests.
 #' @importFrom dplyr %>% mutate_
 #' @importFrom tidyr gather_
+#' @importFrom stats lm na.omit pf model.matrix
 compute_significance_data = function (values, pdata, component_names) {
   var_names = get_var_names(pdata)
 
