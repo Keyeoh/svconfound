@@ -72,7 +72,7 @@ get_var_names = function(pdata) {
 #' for continuous independent variables.
 #'
 #' An association test is performed between every component (Principal Component
-#' or Surogate Variable) and every phenotype and control variable. P-values are
+#' or Surrogate Variable) and every phenotype and control variable. P-values are
 #' then collected and stored in a \code{tbl_df} object describing all the
 #' comparisons.
 #'
@@ -126,11 +126,11 @@ compute_significance_data_var_names = function(values, pdata, component_names,
 #' for continuous independent variables.
 #'
 #' An association test is performed between every component (Principal Component
-#' or Surogate Variable) and every phenotype and control variable. P-values are
+#' or Surrogate Variable) and every phenotype and control variable. P-values are
 #' then collected and stored in a \code{tbl_df} object describing all the
 #' comparisons.
 #'
-#' @param values A matrix containing either principal components or surogate
+#' @param values A matrix containing either principal components or surrogate
 #' variables.
 #' @param pdata A data.frame containing the phenotypical data for the samples.
 #' @param component_names A character vector containing the component names.

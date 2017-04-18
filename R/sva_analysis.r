@@ -1,24 +1,31 @@
 #' Perform SVA confounder analysis
 #'
-#' @param values A matrix containing the data to analyze. Rows are for variables
-#' and columns for samples.
-#' @param pdata A data.frame containing the phenotypical information for the
-#' samples.
+#' Perform SVA confounder analysis and association tests between the Surrogate
+#' Variables of the given input values and the phenotype data.
+#'
+#' This function performs a series of association tests between the Surrogate
+#' Variables of the input values and the provided phenotype data.
+#'
+#' If a RGChannelSet is given, it can also compute the association with the
+#' control probes. This implementation uses Linear models.
+#'
+#' @param values A matrix containing the data to analyze. Rows represent
+#'   variables and columns samples.
+#' @param pdata A data.frame containing the phenotype information for the
+#'   samples.
 #' @param main_formula A formula describing the main model of interest.
 #' @param null_formula A formula describing the null model of interest.
-#' @param vfilter The number of most variant variables to use in order to
-#' estimate the number of surrogate variables.
-#' @param rgSet If not NULL, calculate show control variables
-#' @return A list containing the number of surrogate variables (num_sv), the
-#' results of the confounding analysis tests (significance), and the surrogate
-#' variables obtained by sva (surrogates).
-#'
-#' @export
+#' @param vfilter The number of most variable rows to use in order to
+#'   estimate the number of surrogate variables.
+#' @param rgset If not NULL, compute association with control probes data
+#'   contained in the provided RGChannelSet.
+#' @return A list containing the number of Surrogate Variables (num_sv), the
+#'   results of the confounding analysis tests (significance), and the Surrogate
+#'   Variables obtained by SVA (surrogates).
 #' @importFrom sva num.sv sva
-sva_analysis = function(values, pdata, main_formula,
-                        null_formula = NULL,
-                        vfilter = NULL,
-                        rgSet = NULL) {
+#' @export
+sva_analysis = function(values, pdata, main_formula, null_formula = NULL,
+                        vfilter = NULL, rgset = NULL) {
 
   if (!is.null(vfilter)) {
     vfilter = min(vfilter, nrow(values))
@@ -26,9 +33,11 @@ sva_analysis = function(values, pdata, main_formula,
 
   mod = model.matrix(main_formula, data = pdata)
   mod0 = NULL
+
   if (!is.null(null_formula)) {
     mod0 = model.matrix(null_formula, data = pdata)
   }
+
   num_sv = num.sv(values, mod = mod, vfilter = vfilter)
   svs = sva(values, mod = mod, mod0 = mod0, n.sv = num_sv)
 
@@ -37,7 +46,7 @@ sva_analysis = function(values, pdata, main_formula,
 
   significance_data = compute_significance_data(svs$sv, pdata, sv_names)
 
-  data_control_values = get_control_variables(rgSet)
+  data_control_values = get_control_variables(rgset)
   sig_data_rgset = NULL
 
   if (!is.null(data_control_values)) {
@@ -48,9 +57,11 @@ sva_analysis = function(values, pdata, main_formula,
                                                          sv_names,
                                                          var_names)
     significance_data = rbind(significance_data, sig_data_rgset)
-    # for sorting elements
-    significance_data$Variable = factor(significance_data$Variable,
-                                        levels = unique(significance_data$Variable))
+
+    significance_data$Variable = factor(
+      significance_data$Variable,
+      levels = unique(significance_data$Variable)
+      )
   }
 
   colnames(svs$sv) = gsub('-', '_', sv_names)

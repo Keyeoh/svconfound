@@ -18,7 +18,7 @@ plot_svd_scree = function(x) {
   result = ggplot(x$variance_explained,
                   aes_string(x = 'PC', y = 'Var')) +
     geom_line(aes_string(group = '1'), col = 'red', linetype = 5) +
-    geom_vline(xintercept = x$limited_significant_PC, color = 'grey') +
+    geom_vline(xintercept = x$limit_significant_PC, color = 'grey') +
     geom_point(size = 5, shape = 21, col = 'red', fill = 'lightblue') +
     ylab('Variance Explained') +
     xlab('Component') +
@@ -57,7 +57,7 @@ screeplot.SVDAnalysis = function(x, ...) {
 #' This internal function takes the result of either \code{svd_analysis} or
 #' \code{sva_analysis} functions and returns a heatmap representing the degree
 #' of significance for each of the performed association tests. Components or
-#' surogate variables are represented on the x axis. Control and phenotype
+#' surrogate variables are represented on the x axis. Control and phenotype
 #' variables are represented in the y axis. The color of each cell corresponds
 #' to the degree of statistical significance for the corresponding association
 #' test.
@@ -71,7 +71,7 @@ plot_significance = function(x) {
   colors_palette = c('darkred', 'red', 'orange', 'gold', 'pink', 'transparent')
 
   x = ggplot(x$significance, aes_string(x = 'PC', y = 'Variable')) +
-    geom_vline(xintercept = x$limited_significant_PC, color = 'grey') +
+    geom_vline(xintercept = x$limit_significant_PC, color = 'grey') +
     scale_x_discrete() +
     geom_tile(aes_string(fill = 'Sig', color = 'Sig'), width = 0.6,
               height = 0.6) +
@@ -120,7 +120,7 @@ plot.SVDAnalysis = function(x, ...) {
 #'
 #' This internal function takes the result of the \code{sva_analysis} function
 #' and returns a heatmap representing the degree of significance for each of the
-#' performed association tests. Surogate Variables are represented on the x
+#' performed association tests. Surrogate Variables are represented on the x
 #' axis. Control and phenotype variables are represented in the y axis. The
 #' color of each cell corresponds to the degree of statistical significance for
 #' the corresponding association test.
@@ -133,7 +133,7 @@ plot.SVDAnalysis = function(x, ...) {
 #' @importFrom graphics plot
 #' @export
 plot.SVAAnalysis = function(x, ...) {
-  x$limited_significant_PC = x$num_sv
+  x$limit_significant_PC = x$num_sv
   return(plot_significance(x, ...))
 }
 
