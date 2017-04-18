@@ -1,19 +1,28 @@
 Package: svconfound
 Type: Package
-Title: Simple confounding analysis
-Version: 0.1
+Title: A simple SVD/SVA confounding analysis framework
+Version: 0.2.0
 Date: 2016-02-19
-Author: Gustavo Fernandez Bayon
-Maintainer: Gustavo Fernandez Bayon <fernandezgustavo@uniovi.es>
+Authors@R: c(
+  person("Gustavo", "Fernandez", email = "fernandezgustavo@uniovi.es", 
+    role = c("cre", "aut")),
+  person("Isabel", "Cobo", email = "icobo@carrerasresearch.org", role = "aut")
+  )
 Description: This package implements a simple strategy for analyzing confounding
     variation on datasets. The strategy is mostly based on Andrew Teschendorff's
-    book chapter 3 in "Computational and Statistical Epigenomics".
-License: Artistic-2.0
+    book chapter 3 in "Computational and Statistical Epigenomics". It provides
+    two functions for SVD and SVA analysis of the possible confounding variables
+    among the phenotype data and control variables, and implementations of the
+    screeplot and plot methods for them.
+License: MIT + file LICENSE
 LazyData: TRUE
 RoxygenNote: 5.0.1
 Imports:
   dplyr,
   ggplot2,
+  isva,
+  methods,
+  minfi,
   sva,
   tidyr
 
