@@ -107,10 +107,10 @@ svd_analysis = function(values, pdata, center = T, scale = F,
     # warning!! we are removing samples (the original values matrix has samples like rows
     # and variables like colums)
     # Rows label features/variables, Columns samples.
-    dim_pca = isva::EstDimRMT(t(values[1:max_samples, ]))$dim
+    dim_pca = isva::EstDimRMT(t(values[1:max_samples, ]), plot = FALSE)$dim
   } else {
     # Rows label features/variables, Columns samples.
-    dim_pca = isva::EstDimRMT(t(values))$dim
+    dim_pca = isva::EstDimRMT(t(values), plot = FALSE)$dim
   }
 
   result = list(
