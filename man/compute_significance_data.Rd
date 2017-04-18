@@ -4,7 +4,8 @@
 \alias{compute_significance_data}
 \title{Compute associations with phenotypical variables.}
 \usage{
-compute_significance_data(values, pdata, component_names)
+compute_significance_data(values, pdata, component_names, method = c("lm",
+  "kruskal"))
 }
 \arguments{
 \item{values}{A matrix containing either principal components or surrogate
@@ -13,6 +14,8 @@ variables.}
 \item{pdata}{A data.frame containing the phenotypical data for the samples.}
 
 \item{component_names}{A character vector containing the component names.}
+
+\item{method}{The algoritm used for calculating p-values}
 }
 \value{
 A tbl_df with the results of the association tests.

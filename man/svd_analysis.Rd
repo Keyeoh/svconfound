@@ -4,13 +4,32 @@
 \alias{svd_analysis}
 \title{Compute SVD confounder analysis.}
 \usage{
-svd_analysis(values, pdata)
+svd_analysis(values, pdata, center = T, scale = F,
+  significante_data_from_samples = nrow(pdata) == nrow(values),
+  rgSet = NULL, method = c("lm", "kruskal"))
 }
 \arguments{
-\item{values}{A matrix of numerical values. Rows represent variables and
-columns samples.}
+\item{values}{A matrix of numerical values. Rows represent samples and
+columns variables.}
 
 \item{pdata}{A data.frame containing the phenotypical data for the samples.}
+
+\item{center}{A logical value indicating whether the variables should be shifted to
+be zero centered. Alternately, a vector of length equal the number of columns of x
+can be supplied. The value is passed to scale.}
+
+\item{scale}{A logical value indicating whether the variables should be scaled to
+have unit variance before the analysis takes place. The default is FALSE for
+ consistency with S, but in general scaling is advisable. Alternatively, a
+ vector of length equal the number of columns of x can be supplied. The value is
+ passed to scale. Use when the variables are in arbitrary units of measurement}
+
+\item{significante_data_from_samples}{If TRUE obtain p-values and variance explained from samples.
+Otherwise obtain it from variables. Change only experts for obtaining other data}
+
+\item{rgSet}{If not NULL, calculate show control variables}
+
+\item{method}{Method used for calculate p-values for pdata variables}
 }
 \value{
 A list containing the proportion of variance explained by the

@@ -14,6 +14,9 @@ RoxygenNote: 5.0.1
 Imports:
   dplyr,
   ggplot2,
+  isva,
+  methods,
+  minfi,
   sva,
   tidyr
 

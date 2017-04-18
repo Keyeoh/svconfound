@@ -4,7 +4,8 @@
 \alias{sva_analysis}
 \title{Perform SVA confounder analysis}
 \usage{
-sva_analysis(values, pdata, main_formula, vfilter = NULL)
+sva_analysis(values, pdata, main_formula, null_formula = NULL,
+  vfilter = NULL, rgSet = NULL)
 }
 \arguments{
 \item{values}{A matrix containing the data to analyze. Rows are for variables
@@ -15,8 +16,12 @@ samples.}
 
 \item{main_formula}{A formula describing the main model of interest.}
 
+\item{null_formula}{A formula describing the null model of interest.}
+
 \item{vfilter}{The number of most variant variables to use in order to
 estimate the number of surrogate variables.}
+
+\item{rgSet}{If not NULL, calculate show control variables}
 }
 \value{
 A list containing the number of surrogate variables (num_sv), the
