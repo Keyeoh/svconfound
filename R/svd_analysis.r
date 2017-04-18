@@ -1,34 +1,3 @@
-#' Get p-value from f statistic data.
-#'
-#' @param fstat A numeric vector of length three obtained from a linear model
-#' fit.
-#'
-#' @return The computed p-value.
-get_p_value = function(fstat) {
-  if (is.numeric(fstat['value'])) {
-    p_value = 1 - pf(fstat['value'], fstat['numdf'], fstat['dendf'])
-  } else {
-    p_value = 1
-  }
-  return(p_value)
-}
-
-#' Get variable names suitable for analysis.
-#'
-#' @param pdata A data.frame containing the phenotypical data.
-#'
-#' @return A character vector containing the selected variable names.
-get_var_names = function(pdata) {
-
-  n_levels = sapply(pdata, function(xx) length(unique(xx)))
-  var_names = colnames(pdata)[(n_levels > 1 & n_levels < nrow(pdata)) |
-                                sapply(pdata, is.numeric)]
-  names(var_names) = var_names
-
-  return(var_names)
-}
-
-
 #' Compute SVD confounder analysis.
 #'
 #' @param values A matrix of numerical values. Rows represent samples and
