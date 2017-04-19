@@ -25,4 +25,6 @@ Imports:
   minfi,
   sva,
   tidyr
+Suggests:
+  testthat
 
