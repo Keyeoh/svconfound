@@ -10,8 +10,10 @@
 #' @return A factor containing the resulting categories.
 cut_pvalues = function(p_values) {
   result = cut(
-    p_values, c(-Inf, 1e-10, 1e-5, 0.001, 0.01, 0.05, Inf),
-    labels = c('< 1e-10', '< 1e-5', '< 0.001', '< 0.01', '< 0.05', 'NS')
+    p_values,
+    c(-Inf, 1e-10, 1e-5, 0.001, 0.01, 0.05, Inf),
+    labels = c('< 1e-10', '< 1e-5', '< 0.001', '< 0.01', '< 0.05', 'NS'),
+    include.lowest = TRUE
     )
   return(result)
 }
