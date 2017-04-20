@@ -32,8 +32,9 @@ cut_pvalues = function(p_values) {
 #' @return The computed p-value.
 get_p_value = function(fstat) {
   if (is.numeric(fstat['value'])) {
-    p_value = 1 - pf(fstat['value'], fstat['numdf'], fstat['dendf'])
+    p_value = 1 - pf(fstat[['value']], fstat[['numdf']], fstat[['dendf']])
   } else {
+    warning('Non-numeric F statistic. Setting p-value to 1.')
     p_value = 1
   }
   return(p_value)

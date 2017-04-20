@@ -1,6 +1,6 @@
 library(svconfound)
 
-context('Cut p-values')
+context('cut_pvalues()')
 
 test_that('cut_pvalues() fails on empty input', {
   expect_error(cut_pvalues())
