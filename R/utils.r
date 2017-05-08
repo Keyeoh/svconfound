@@ -54,10 +54,18 @@ get_p_value = function(fstat) {
 #' @param pdata A data.frame containing the phenotypical data.
 #' @return A character vector containing the selected variable names.
 get_var_names = function(pdata) {
+  if (!is.data.frame(pdata)) {
+    stop('Input must be a data.frame.')
+  }
 
   n_levels = sapply(pdata, function(xx) length(unique(xx)))
   var_names = colnames(pdata)[(n_levels > 1 & n_levels < nrow(pdata)) |
                                 sapply(pdata, is.numeric)]
+
+  if (length(var_names) == 0) {
+    stop('There are no suitable variables for testing.')
+  }
+
   names(var_names) = var_names
 
   return(var_names)
