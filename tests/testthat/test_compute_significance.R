@@ -173,6 +173,45 @@ test_that(
   )
 })
 
+test_that('compute_significance_data() works as expected', {
+  expect_is(
+    compute_significance_data(
+      values = mock_values,
+      pdata = mock_pdata,
+      component_names = mock_c_names,
+      method = 'lm'
+    ),
+    'data.frame'
+  )
+  expect_equal(
+    compute_significance_data(
+      values = mock_values,
+      pdata = mock_pdata,
+      component_names = mock_c_names,
+      method = 'lm'
+    ),
+    mock_true_result_lm
+  )
+  expect_is(
+    compute_significance_data(
+      values = mock_values,
+      pdata = mock_pdata[, 1:2],
+      component_names = mock_c_names,
+      method = 'kruskal'
+    ),
+    'data.frame'
+  )
+  expect_equal(
+    compute_significance_data(
+      values = mock_values,
+      pdata = mock_pdata[, 1:2],
+      component_names = mock_c_names,
+      method = 'kruskal'
+    ),
+    mock_true_result_kruskal
+  )
+})
+
 # Negative tests ===============================================================
 test_that('compute_significance_data_var_names() fails on empty inputs', {
   expect_error(
@@ -232,6 +271,14 @@ test_that(
         pdata = mock_pdata,
         component_names = mock_c_names,
         var_names = mock_v_names,
+        method = 'kruskal'
+      )
+    )
+    expect_error(
+      compute_significance_data(
+        values = mock_values,
+        pdata = mock_pdata,
+        component_names = mock_c_names,
         method = 'kruskal'
       )
     )

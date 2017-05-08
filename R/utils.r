@@ -106,9 +106,10 @@ compute_significance_data_var_names = function(values, pdata, component_names,
 
   if (method == 'kruskal') {
     is_col_numeric = vapply(pdata[, var_names], is.numeric, FALSE)
+
     if (any(is_col_numeric)) {
       stop(paste('Kruskal-Wallis method cannot be used when there are numeric',
-                 'phenotype variables'))
+                 'phenotype variables.'))
     }
 
     fits = function(val, pd) {
