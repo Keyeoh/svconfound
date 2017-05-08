@@ -21,7 +21,7 @@ variables.}
 tests.}
 }
 \value{
-A tbl_df with the results of the association tests.
+A data.frame with the results of the association tests.
 }
 \description{
 Compute associations with phenotypical and control variables in order to

@@ -91,7 +91,7 @@ get_var_names = function(pdata) {
 #'
 #' @inheritParams compute_significance_data
 #' @param var_names Variable names to be used for calculating the p_values.
-#' @return A tbl_df with the results of the association tests.
+#' @return A data.frame with the results of the association tests.
 #' @importFrom dplyr %>% mutate_
 #' @importFrom tidyr gather_
 #' @importFrom stats lm na.omit pf model.matrix kruskal.test
@@ -99,7 +99,19 @@ compute_significance_data_var_names = function(values, pdata, component_names,
                                                 var_names,
                                                 method = c('lm', 'kruskal')) {
   method = match.arg(method)
+
+  if (is.null(names(var_names))) {
+    names(var_names) = var_names
+  }
+
   if (method == 'kruskal') {
+    is_col_numeric = vapply(pdata[, var_names], is.numeric, FALSE)
+
+    if (any(is_col_numeric)) {
+      stop(paste('Kruskal-Wallis method cannot be used when there are numeric',
+                 'phenotype variables.'))
+    }
+
     fits = function(val, pd) {
       kruskal.test(val, pd)$p.value
     }
@@ -147,7 +159,7 @@ compute_significance_data_var_names = function(values, pdata, component_names,
 #' @param component_names A character vector containing the component names.
 #' @param method A character indicating the method used for the association
 #' tests.
-#' @return A tbl_df with the results of the association tests.
+#' @return A data.frame with the results of the association tests.
 #' @importFrom dplyr %>% mutate_
 #' @importFrom tidyr gather_
 compute_significance_data = function (values, pdata, component_names,
