@@ -26,5 +26,6 @@ Imports:
   sva,
   tidyr
 Suggests:
+  IlluminaHumanMethylation450kmanifest,
   testthat
 
