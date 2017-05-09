@@ -189,50 +189,50 @@ compute_significance_data = function (values, pdata, component_names,
 #' @importFrom minfi getControlAddress getRed getGreen
 #' @return A matrix with the values of the control elements.
 get_control_variables = function(rgset) {
-  datac2_m = NULL
-
-  if (!is.null(rgset) && is(rgset, 'RGChannelSet')) {
-    bc1 = getControlAddress(rgset, controlType = c('BISULFITE CONVERSION I'))
-    bc2 = getControlAddress(rgset, controlType = c('BISULFITE CONVERSION II'))
-    ext = getControlAddress(rgset, controlType = c('EXTENSION'))
-    tr = getControlAddress(rgset, controlType = c('TARGET REMOVAL'))
-    hyb = getControlAddress(rgset, controlType = c('HYBRIDIZATION'))
-
-    control_names = c(
-      'BSC-I C1 Grn',
-      'BSC-I C2 Grn',
-      'BSC-I C3 Grn',
-      'BSC-I C4 Red',
-      'BSC-I C5 Red',
-      'BSC-I C6 Red',
-      'BSC-II C1 Red',
-      'BSC-II C2 Red',
-      'BSC-II C3 Red',
-      'BSC-II C4 Red',
-      'Target Removal 1 Grn',
-      'Target Removal 2 Grn',
-      'Hyb (Low) Grn',
-      'Hyb (Medium) Grn',
-      'Hyb (High) Grn',
-      'Extension (A) Red',
-      'Extension (T) Red',
-      'Extension (C) Grn',
-      'Extension (G) Grn'
-    )
-
-    control_signals = rbind(
-      getGreen(rgset)[bc1[1:3],],
-      getRed(rgset)[bc1[7:9],],
-      getRed(rgset)[bc2[1:4],],
-      getGreen(rgset)[tr[1:2],],
-      getGreen(rgset)[hyb[1:3],],
-      getRed(rgset)[ext[1:2],],
-      getGreen(rgset)[ext[3:4],]
-    )
-    dimnames(control_signals) = list(control_names, colnames(rgset))
-
-    datac2_m = t(log2(control_signals))
+  if (!is(rgset, 'RGChannelSet')) {
+    stop('Input must be of RGChannelSet type.')
   }
+
+  bc1 = getControlAddress(rgset, controlType = c('BISULFITE CONVERSION I'))
+  bc2 = getControlAddress(rgset, controlType = c('BISULFITE CONVERSION II'))
+  ext = getControlAddress(rgset, controlType = c('EXTENSION'))
+  tr = getControlAddress(rgset, controlType = c('TARGET REMOVAL'))
+  hyb = getControlAddress(rgset, controlType = c('HYBRIDIZATION'))
+
+  control_names = c(
+    'BSC-I C1 Grn',
+    'BSC-I C2 Grn',
+    'BSC-I C3 Grn',
+    'BSC-I C4 Red',
+    'BSC-I C5 Red',
+    'BSC-I C6 Red',
+    'BSC-II C1 Red',
+    'BSC-II C2 Red',
+    'BSC-II C3 Red',
+    'BSC-II C4 Red',
+    'Target Removal 1 Grn',
+    'Target Removal 2 Grn',
+    'Hyb (Low) Grn',
+    'Hyb (Medium) Grn',
+    'Hyb (High) Grn',
+    'Extension (A) Red',
+    'Extension (T) Red',
+    'Extension (C) Grn',
+    'Extension (G) Grn'
+  )
+
+  control_signals = rbind(
+    getGreen(rgset)[bc1[1:3],],
+    getRed(rgset)[bc1[7:9],],
+    getRed(rgset)[bc2[1:4],],
+    getGreen(rgset)[tr[1:2],],
+    getGreen(rgset)[hyb[1:3],],
+    getRed(rgset)[ext[1:2],],
+    getGreen(rgset)[ext[3:4],]
+  )
+  dimnames(control_signals) = list(control_names, colnames(rgset))
+
+  datac2_m = t(log2(control_signals))
 
   return(datac2_m)
 }
