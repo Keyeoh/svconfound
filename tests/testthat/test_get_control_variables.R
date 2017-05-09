@@ -33,7 +33,10 @@ mock_red = matrix(2 ^ (25:1), nrow = 25, ncol = 5,
 mock_rgset = RGChannelSet(
   Green = mock_green,
   Red = mock_red,
-  annotation = 'IlluminaHumanMethylation450k'
+  annotation = c(
+    array = 'IlluminaHumanMethylation450k',
+    annotation = 'ilmn12.hg19'
+  )
 )
 
 mock_output = structure(
