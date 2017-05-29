@@ -63,7 +63,7 @@ test_that('svd_analysis() works on a basic call (scaling)', {
   expect_null(mock_result[['significance_control']])
   expect_equal(mock_result[['significance']][['P_Value']],
                c(0.49, 0, 0.44, 0.07, 0.83, 0.87, 0.6, 0.05, 0.9),
-               tolerance = 0.01)
+               tolerance = 0.1)
   expect_equal(
     mock_result[['significance']][['Sig']],
     factor(
@@ -120,7 +120,7 @@ test_that('svd_analysis() works on a basic call (with RGset)', {
                tolerance = 0.01)
   expect_equal(mock_result[['significance']][['P_Value']][1:9],
                c(0.49, 0, 0.44, 0.07, 0.83, 0.87, 0.6, 0.05, 0.9),
-               tolerance = 0.01)
+               tolerance = 0.1)
   expect_equal(mock_result[['significance']][['P_Value']][10:66],
                c(0.2, 0.6, 0.96, 0.2, 0.52, 0.98, 0.2, 0.47, 0.99, 0.76, 0.09,
                  0.9, 0.75, 0.09, 0.9, 0.74, 0.09, 0.9, 0.7, 0.1, 0.9, 0.68,
