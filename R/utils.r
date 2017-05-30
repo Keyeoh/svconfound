@@ -122,10 +122,19 @@ compute_significance_data_var_names = function(values, pdata, component_names,
   } else {
     fits = lapply(var_names, function(xx) lm(values ~ pdata[, xx]))
     sfits = lapply(fits, summary)
-    pvalues = lapply(
-      sfits,
-      function(xx) sapply(xx, function(yy) get_p_value(yy$fstatistic))
-    )
+
+    # Result being a nested list depends on the number of columns of values
+    if (ncol(values) == 1) {
+      pvalues = lapply(
+        sfits,
+        function(xx) get_p_value(xx$fstatistic)
+      )
+    } else {
+      pvalues = lapply(
+        sfits,
+        function(xx) sapply(xx, function(yy) get_p_value(yy$fstatistic))
+      )
+    }
   }
   p_values_df = data.frame(pvalues, check.names = FALSE)
 
