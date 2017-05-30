@@ -2,6 +2,7 @@
 
 S3method(plot,SVAAnalysis)
 S3method(plot,SVDAnalysis)
+S3method(screeplot,SVAAnalysis)
 S3method(screeplot,SVDAnalysis)
 export(sva_analysis)
 export(svd_analysis)

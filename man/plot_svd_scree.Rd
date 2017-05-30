@@ -24,4 +24,3 @@ function as input. It generates a scree plot showing the ratio of explained
 variance for the ordered Principal Components. It is very similar to the
 \code{screeplot} function but it uses ggplot2 instead of base graphics.
 }
-

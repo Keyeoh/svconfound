@@ -26,4 +26,3 @@ functions with more data to test. It is usually useful to test if control
 probes are introducing some confounding in the dataset, as it might be
 signaling that there are unknown effects in the data.
 }
-

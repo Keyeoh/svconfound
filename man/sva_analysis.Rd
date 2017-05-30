@@ -40,4 +40,3 @@ Variables of the input values and the provided phenotype data.
 If a RGChannelSet is given, it can also compute the association with the
 control probes. This implementation uses Linear models.
 }
-

@@ -23,4 +23,3 @@ be tested for association. The current implementation avoids testing on
 categorical variables where all elements belong to the same level, or where
 every level has only one observation.
 }
-
