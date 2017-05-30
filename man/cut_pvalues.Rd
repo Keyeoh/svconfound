@@ -20,4 +20,3 @@ This is a simple internal function for cutting a vector of p-values into
 a set of meaningful categories. The categories are taken from the original
 book chapter that inspired the package.
 }
-

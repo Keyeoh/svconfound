@@ -26,4 +26,3 @@ variables are represented in the y axis. The color of each cell corresponds
 to the degree of statistical significance for the corresponding association
 test.
 }
-

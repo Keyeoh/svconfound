@@ -49,6 +49,23 @@ screeplot.SVDAnalysis = function(x, ...) {
   return(plot_svd_scree(x, ...))
 }
 
+#' Plot ratio of explained variance.
+#'
+#' Generates an error when the user tries to call the \code{screeplot} function
+#' on a SVAAnalysis object.
+#'
+#' This is a generic method taking the output of the \code{sva_analysis}
+#' function as input. It generates an error..
+#'
+#' @param x A list containing the results from the sva_analysis function.
+#' @param ... Arguments to be passed to methods.
+#' @importFrom stats screeplot
+#' @method screeplot SVAAnalysis
+#' @export
+screeplot.SVAAnalysis = function(x, ...) {
+  stop('cannot be called on a SVAAnalysis object')
+}
+
 #' Plot results of SVD/SVA confounder analysis.
 #'
 #' Plot results of SVD/SVA confounder analysis as a heatmap where each cell

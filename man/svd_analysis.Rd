@@ -58,4 +58,3 @@ when using the latter.
 The number of meaningful components is computed using the function
 \code{EstDimRMT} from the package \code{isva}.
 }
-
