@@ -77,10 +77,11 @@ svd_analysis = function(
                                                 component_names,
                                                 method = method)
 
-  data_control_values = get_control_variables(rgset)
+
   sig_data_rgset = NULL
 
-  if (!is.null(data_control_values)) {
+  if (!is.null(rgset)) {
+    data_control_values = get_control_variables(rgset)
     var_names = colnames(data_control_values)
     names(var_names) = var_names
     sig_data_rgset = compute_significance_data_var_names(matrix_for_sig_data,

@@ -10,8 +10,10 @@
 #' @return A factor containing the resulting categories.
 cut_pvalues = function(p_values) {
   result = cut(
-    p_values, c(-Inf, 1e-10, 1e-5, 0.001, 0.01, 0.05, Inf),
-    labels = c('< 1e-10', '< 1e-5', '< 0.001', '< 0.01', '< 0.05', 'NS')
+    p_values,
+    c(-Inf, 1e-10, 1e-5, 0.001, 0.01, 0.05, Inf),
+    labels = c('< 1e-10', '< 1e-5', '< 0.001', '< 0.01', '< 0.05', 'NS'),
+    include.lowest = TRUE
     )
   return(result)
 }
@@ -30,8 +32,9 @@ cut_pvalues = function(p_values) {
 #' @return The computed p-value.
 get_p_value = function(fstat) {
   if (is.numeric(fstat['value'])) {
-    p_value = 1 - pf(fstat['value'], fstat['numdf'], fstat['dendf'])
+    p_value = 1 - pf(fstat[['value']], fstat[['numdf']], fstat[['dendf']])
   } else {
+    warning('Non-numeric F statistic. Setting p-value to 1.')
     p_value = 1
   }
   return(p_value)
@@ -51,10 +54,18 @@ get_p_value = function(fstat) {
 #' @param pdata A data.frame containing the phenotypical data.
 #' @return A character vector containing the selected variable names.
 get_var_names = function(pdata) {
+  if (!is.data.frame(pdata)) {
+    stop('Input must be a data.frame.')
+  }
 
   n_levels = sapply(pdata, function(xx) length(unique(xx)))
   var_names = colnames(pdata)[(n_levels > 1 & n_levels < nrow(pdata)) |
                                 sapply(pdata, is.numeric)]
+
+  if (length(var_names) == 0) {
+    stop('There are no suitable variables for testing.')
+  }
+
   names(var_names) = var_names
 
   return(var_names)
@@ -80,7 +91,7 @@ get_var_names = function(pdata) {
 #'
 #' @inheritParams compute_significance_data
 #' @param var_names Variable names to be used for calculating the p_values.
-#' @return A tbl_df with the results of the association tests.
+#' @return A data.frame with the results of the association tests.
 #' @importFrom dplyr %>% mutate_
 #' @importFrom tidyr gather_
 #' @importFrom stats lm na.omit pf model.matrix kruskal.test
@@ -88,7 +99,19 @@ compute_significance_data_var_names = function(values, pdata, component_names,
                                                 var_names,
                                                 method = c('lm', 'kruskal')) {
   method = match.arg(method)
+
+  if (is.null(names(var_names))) {
+    names(var_names) = var_names
+  }
+
   if (method == 'kruskal') {
+    is_col_numeric = vapply(pdata[, var_names], is.numeric, FALSE)
+
+    if (any(is_col_numeric)) {
+      stop(paste('Kruskal-Wallis method cannot be used when there are numeric',
+                 'phenotype variables.'))
+    }
+
     fits = function(val, pd) {
       kruskal.test(val, pd)$p.value
     }
@@ -99,10 +122,19 @@ compute_significance_data_var_names = function(values, pdata, component_names,
   } else {
     fits = lapply(var_names, function(xx) lm(values ~ pdata[, xx]))
     sfits = lapply(fits, summary)
-    pvalues = lapply(
-      sfits,
-      function(xx) sapply(xx, function(yy) get_p_value(yy$fstatistic))
-    )
+
+    # Result being a nested list depends on the number of columns of values
+    if (ncol(values) == 1) {
+      pvalues = lapply(
+        sfits,
+        function(xx) get_p_value(xx$fstatistic)
+      )
+    } else {
+      pvalues = lapply(
+        sfits,
+        function(xx) sapply(xx, function(yy) get_p_value(yy$fstatistic))
+      )
+    }
   }
   p_values_df = data.frame(pvalues, check.names = FALSE)
 
@@ -136,7 +168,7 @@ compute_significance_data_var_names = function(values, pdata, component_names,
 #' @param component_names A character vector containing the component names.
 #' @param method A character indicating the method used for the association
 #' tests.
-#' @return A tbl_df with the results of the association tests.
+#' @return A data.frame with the results of the association tests.
 #' @importFrom dplyr %>% mutate_
 #' @importFrom tidyr gather_
 compute_significance_data = function (values, pdata, component_names,
@@ -166,50 +198,50 @@ compute_significance_data = function (values, pdata, component_names,
 #' @importFrom minfi getControlAddress getRed getGreen
 #' @return A matrix with the values of the control elements.
 get_control_variables = function(rgset) {
-  datac2_m = NULL
-
-  if (!is.null(rgset) && is(rgset, 'RGChannelSet')) {
-    bc1 = getControlAddress(rgset, controlType = c('BISULFITE CONVERSION I'))
-    bc2 = getControlAddress(rgset, controlType = c('BISULFITE CONVERSION II'))
-    ext = getControlAddress(rgset, controlType = c('EXTENSION'))
-    tr = getControlAddress(rgset, controlType = c('TARGET REMOVAL'))
-    hyb = getControlAddress(rgset, controlType = c('HYBRIDIZATION'))
-
-    control_names = c(
-      'BSC-I C1 Grn',
-      'BSC-I C2 Grn',
-      'BSC-I C3 Grn',
-      'BSC-I C4 Red',
-      'BSC-I C5 Red',
-      'BSC-I C6 Red',
-      'BSC-II C1 Red',
-      'BSC-II C2 Red',
-      'BSC-II C3 Red',
-      'BSC-II C4 Red',
-      'Target Removal 1 Grn',
-      'Target Removal 2 Grn',
-      'Hyb (Low) Grn',
-      'Hyb (Medium) Grn',
-      'Hyb (High) Grn',
-      'Extension (A) Red',
-      'Extension (T) Red',
-      'Extension (C) Grn',
-      'Extension (G) Grn'
-    )
-
-    control_signals = rbind(
-      getGreen(rgset)[bc1[1:3],],
-      getRed(rgset)[bc1[7:9],],
-      getRed(rgset)[bc2[1:4],],
-      getGreen(rgset)[tr[1:2],],
-      getGreen(rgset)[hyb[1:3],],
-      getRed(rgset)[ext[1:2],],
-      getGreen(rgset)[ext[3:4],]
-    )
-    dimnames(control_signals) = list(control_names, colnames(rgset))
-
-    datac2_m = t(log2(control_signals))
+  if (!is(rgset, 'RGChannelSet')) {
+    stop('Input must be of RGChannelSet type.')
   }
+
+  bc1 = getControlAddress(rgset, controlType = c('BISULFITE CONVERSION I'))
+  bc2 = getControlAddress(rgset, controlType = c('BISULFITE CONVERSION II'))
+  ext = getControlAddress(rgset, controlType = c('EXTENSION'))
+  tr = getControlAddress(rgset, controlType = c('TARGET REMOVAL'))
+  hyb = getControlAddress(rgset, controlType = c('HYBRIDIZATION'))
+
+  control_names = c(
+    'BSC-I C1 Grn',
+    'BSC-I C2 Grn',
+    'BSC-I C3 Grn',
+    'BSC-I C4 Red',
+    'BSC-I C5 Red',
+    'BSC-I C6 Red',
+    'BSC-II C1 Red',
+    'BSC-II C2 Red',
+    'BSC-II C3 Red',
+    'BSC-II C4 Red',
+    'Target Removal 1 Grn',
+    'Target Removal 2 Grn',
+    'Hyb (Low) Grn',
+    'Hyb (Medium) Grn',
+    'Hyb (High) Grn',
+    'Extension (A) Red',
+    'Extension (T) Red',
+    'Extension (C) Grn',
+    'Extension (G) Grn'
+  )
+
+  control_signals = rbind(
+    getGreen(rgset)[bc1[1:3],],
+    getRed(rgset)[bc1[7:9],],
+    getRed(rgset)[bc2[1:4],],
+    getGreen(rgset)[tr[1:2],],
+    getGreen(rgset)[hyb[1:3],],
+    getRed(rgset)[ext[1:2],],
+    getGreen(rgset)[ext[3:4],]
+  )
+  dimnames(control_signals) = list(control_names, colnames(rgset))
+
+  datac2_m = t(log2(control_signals))
 
   return(datac2_m)
 }
