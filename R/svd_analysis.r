@@ -20,7 +20,7 @@ get_p_value = function(fstat) {
 #' @return A character vector containing the selected variable names.
 get_var_names = function(pdata) {
 
-  n_levels = sapply(pdata, function(xx) length(unique(xx)))
+  n_levels = sapply(pdata, function(xx) nlevels(factor(xx)))
   var_names = colnames(pdata)[(n_levels > 1 & n_levels < nrow(pdata)) |
                                 sapply(pdata, is.numeric)]
   names(var_names) = var_names
