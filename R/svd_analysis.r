@@ -86,19 +86,7 @@ svd_analysis = function(
       )
   }
 
-  max_samples = 5000
-
-  if (nrow(values) > max_samples) {
-    # select the 5000 first samples warning!! we are removing samples (the
-    # original values matrix has samples like rows and variables like colums)
-    # Rows label features/variables, Columns samples.
-    dim_pca = isva::EstDimRMT(
-      t(scaled_values[1:max_samples, ]), plot = FALSE
-    )$dim
-  } else {
-    # Rows label features/variables, Columns samples.
-    dim_pca = isva::EstDimRMT(t(scaled_values), plot = FALSE)$dim
-  }
+  dim_pca = isva::EstDimRMT(t(scaled_values), plot = FALSE)$dim
 
   result = list(
     variance_explained = variance_explained_data,
