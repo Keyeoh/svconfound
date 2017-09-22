@@ -17,8 +17,8 @@
 #' The number of meaningful components is computed using the function
 #' \code{EstDimRMT} from the package \code{isva}.
 #'
-#' @param values A matrix of numerical values. Rows represent samples and
-#'   columns variables.
+#' @param values A matrix of numerical values. Rows represent
+#'   variables and columns samples.
 #' @param pdata A data.frame containing the phenotype data for the samples.
 #' @param center A logical value indicating whether the variables should be
 #'   shifted to be zero centered. Alternately, a vector of length equal the
@@ -45,14 +45,14 @@ svd_analysis = function(
   pdata,
   center = TRUE,
   scale = FALSE,
-  significant_data_from_samples = nrow(pdata) == nrow(values),
+  significant_data_from_samples = nrow(pdata) == ncol(values),
   rgset = NULL,
   method = c('lm', 'kruskal')) {
 
   method = match.arg(method)
-  values = scale(values, center = center, scale = scale)
+  scaled_values = scale(t(values), center = center, scale = scale)
 
-  sv_decomp = svd(values)
+  sv_decomp = svd(scaled_values)
   var_explained = sv_decomp$d ^ 2 / sum(sv_decomp$d ^ 2)
   component_names = paste0('PC-', 1:length(var_explained))
   component_names = factor(component_names, levels = component_names)
@@ -65,7 +65,7 @@ svd_analysis = function(
   # check the number of elements you want to test
   if (significant_data_from_samples) {
     matrix_for_sig_data = sv_decomp$u
-  } else if (nrow(pdata) == ncol(values)) {
+  } else if (nrow(pdata) == nrow(scaled_values)) {
     matrix_for_sig_data = sv_decomp$v
   } else {
     stop(paste('The num of pdata row elements must be equal',
@@ -102,10 +102,12 @@ svd_analysis = function(
     # select the 5000 first samples warning!! we are removing samples (the
     # original values matrix has samples like rows and variables like colums)
     # Rows label features/variables, Columns samples.
-    dim_pca = isva::EstDimRMT(t(values[1:max_samples, ]), plot = FALSE)$dim
+    dim_pca = isva::EstDimRMT(
+      t(scaled_values[1:max_samples, ]), plot = FALSE
+    )$dim
   } else {
     # Rows label features/variables, Columns samples.
-    dim_pca = isva::EstDimRMT(t(values), plot = FALSE)$dim
+    dim_pca = isva::EstDimRMT(t(scaled_values), plot = FALSE)$dim
   }
 
   result = list(

@@ -5,12 +5,12 @@
 \title{Perform SVD confounder analysis.}
 \usage{
 svd_analysis(values, pdata, center = TRUE, scale = FALSE,
-  significant_data_from_samples = nrow(pdata) == nrow(values), rgset = NULL,
+  significant_data_from_samples = nrow(pdata) == ncol(values), rgset = NULL,
   method = c("lm", "kruskal"))
 }
 \arguments{
-\item{values}{A matrix of numerical values. Rows represent samples and
-columns variables.}
+\item{values}{A matrix of numerical values. Rows represent
+variables and columns samples.}
 
 \item{pdata}{A data.frame containing the phenotype data for the samples.}
 
