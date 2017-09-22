@@ -4,13 +4,12 @@
 \alias{svd_analysis}
 \title{Perform SVD confounder analysis.}
 \usage{
-svd_analysis(values, pdata, center = TRUE, scale = FALSE,
-  significant_data_from_samples = nrow(pdata) == nrow(values), rgset = NULL,
+svd_analysis(values, pdata, center = TRUE, scale = FALSE, rgset = NULL,
   method = c("lm", "kruskal"))
 }
 \arguments{
-\item{values}{A matrix of numerical values. Rows represent samples and
-columns variables.}
+\item{values}{A matrix of numerical values. Rows represent
+variables and columns samples.}
 
 \item{pdata}{A data.frame containing the phenotype data for the samples.}
 
@@ -24,10 +23,6 @@ is FALSE for consistency with S, but in general scaling is advisable.
 Alternatively, a vector of length equal the number of columns of x can be
 supplied. The value is passed to scale. Use when the variables are in
 arbitrary units of measurement.}
-
-\item{significant_data_from_samples}{If TRUE obtain p-values and variance
-explained from samples. Otherwise obtain it from variables. Change only if
-you know what you are doing.}
 
 \item{rgset}{If not NULL, compute association with control probes data
 contained in the provided RGChannelSet.}
