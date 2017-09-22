@@ -29,9 +29,6 @@
 #'   Alternatively, a vector of length equal the number of columns of x can be
 #'   supplied. The value is passed to scale. Use when the variables are in
 #'   arbitrary units of measurement.
-#' @param significant_data_from_samples If TRUE obtain p-values and variance
-#'   explained from samples. Otherwise obtain it from variables. Change only if
-#'   you know what you are doing.
 #' @param rgset If not NULL, compute association with control probes data
 #'   contained in the provided RGChannelSet.
 #' @param method Method used for computing p-values.
@@ -45,7 +42,6 @@ svd_analysis = function(
   pdata,
   center = TRUE,
   scale = FALSE,
-  significant_data_from_samples = nrow(pdata) == ncol(values),
   rgset = NULL,
   method = c('lm', 'kruskal')) {
 
@@ -62,21 +58,15 @@ svd_analysis = function(
     Var = var_explained
   )
 
-  # check the number of elements you want to test
-  if (significant_data_from_samples) {
-    matrix_for_sig_data = sv_decomp$u
-  } else if (nrow(pdata) == nrow(scaled_values)) {
-    matrix_for_sig_data = sv_decomp$v
-  } else {
+  if (nrow(pdata) != nrow(scaled_values)) {
     stop(paste('The num of pdata row elements must be equal',
                'to row elements of [v] or [u].',
                'Actual number of row elements pdata:', nrow(pdata)))
   }
 
-  significance_data = compute_significance_data(matrix_for_sig_data, pdata,
+  significance_data = compute_significance_data(sv_decomp$u, pdata,
                                                 component_names,
                                                 method = method)
-
 
   sig_data_rgset = NULL
 
@@ -84,7 +74,7 @@ svd_analysis = function(
     data_control_values = get_control_variables(rgset)
     var_names = colnames(data_control_values)
     names(var_names) = var_names
-    sig_data_rgset = compute_significance_data_var_names(matrix_for_sig_data,
+    sig_data_rgset = compute_significance_data_var_names(sv_decomp$u,
                                                          data_control_values,
                                                          component_names,
                                                          var_names)
