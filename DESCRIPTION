@@ -27,4 +27,7 @@ Imports:
   tidyr
 Suggests:
   IlluminaHumanMethylation450kmanifest,
-  testthat
+  testthat,
+  knitr,
+  rmarkdown
+VignetteBuilder: knitr
