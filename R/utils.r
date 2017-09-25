@@ -113,7 +113,7 @@ compute_significance_data_var_names = function(values, pdata, component_names,
     }
 
     get_kruskal_p_value = function(val, pd) {
-      kruskal.test(val, pd)$p.value
+      kruskal.test(val, pd)[['p.value']]
     }
     pvalues = lapply(var_names,
                      function(xx) apply(values, 2,
@@ -127,12 +127,12 @@ compute_significance_data_var_names = function(values, pdata, component_names,
     if (ncol(values) == 1) {
       pvalues = lapply(
         model_summaries,
-        function(xx) get_p_value(xx$fstatistic)
+        function(xx) get_p_value(xx[['fstatistic']])
       )
     } else {
       pvalues = lapply(
         model_summaries,
-        function(xx) sapply(xx, function(yy) get_p_value(yy$fstatistic))
+        function(xx) sapply(xx, function(yy) get_p_value(yy[['fstatistic']]))
       )
     }
   }
