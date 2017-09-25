@@ -49,7 +49,7 @@ svd_analysis = function(
   scaled_values = scale(t(values), center = center, scale = scale)
 
   sv_decomp = svd(scaled_values)
-  var_explained = sv_decomp$d ^ 2 / sum(sv_decomp$d ^ 2)
+  var_explained = sv_decomp[['d']] ^ 2 / sum(sv_decomp[['d']] ^ 2)
   component_names = paste0('PC-', 1:length(var_explained))
   component_names = factor(component_names, levels = component_names)
 
@@ -64,7 +64,7 @@ svd_analysis = function(
                'Actual number of row elements pdata:', nrow(pdata)))
   }
 
-  significance_data = compute_significance_data(sv_decomp$u, pdata,
+  significance_data = compute_significance_data(sv_decomp[['u']], pdata,
                                                 component_names,
                                                 method = method)
 
@@ -74,19 +74,19 @@ svd_analysis = function(
     data_control_values = get_control_variables(rgset)
     var_names = colnames(data_control_values)
     names(var_names) = var_names
-    sig_data_rgset = compute_significance_data_var_names(sv_decomp$u,
+    sig_data_rgset = compute_significance_data_var_names(sv_decomp[['u']],
                                                          data_control_values,
                                                          component_names,
                                                          var_names)
     significance_data = rbind(significance_data, sig_data_rgset)
 
-    significance_data$Variable = factor(
-      significance_data$Variable,
-      levels = unique(significance_data$Variable)
+    significance_data[['Variable']] = factor(
+      significance_data[['Variable']],
+      levels = unique(significance_data[['Variable']])
       )
   }
 
-  dim_pca = isva::EstDimRMT(t(scaled_values), plot = FALSE)$dim
+  dim_pca = isva::EstDimRMT(t(scaled_values), plot = FALSE)[['dim']]
 
   result = list(
     variance_explained = variance_explained_data,

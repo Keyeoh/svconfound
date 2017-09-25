@@ -15,10 +15,10 @@
 #' @importFrom ggplot2 ggplot aes_string geom_line geom_point xlab ylab theme_bw
 #' theme element_text geom_vline
 plot_svd_scree = function(x) {
-  result = ggplot(x$variance_explained,
+  result = ggplot(x[['variance_explained']],
                   aes_string(x = 'PC', y = 'Var')) +
     geom_line(aes_string(group = '1'), col = 'red', linetype = 5) +
-    geom_vline(xintercept = x$limit_significant_PC, color = 'grey') +
+    geom_vline(xintercept = x[['limit_significant_PC']], color = 'grey') +
     geom_point(size = 5, shape = 21, col = 'red', fill = 'lightblue') +
     ylab('Variance Explained') +
     xlab('Component') +
@@ -87,8 +87,8 @@ screeplot.SVAAnalysis = function(x, ...) {
 plot_significance = function(x) {
   colors_palette = c('darkred', 'red', 'orange', 'gold', 'pink', 'transparent')
 
-  x = ggplot(x$significance, aes_string(x = 'PC', y = 'Variable')) +
-    geom_vline(xintercept = x$limit_significant_PC, color = 'grey') +
+  x = ggplot(x[['significance']], aes_string(x = 'PC', y = 'Variable')) +
+    geom_vline(xintercept = x[['limit_significant_PC']], color = 'grey') +
     scale_x_discrete() +
     geom_tile(aes_string(fill = 'Sig', color = 'Sig'), width = 0.6,
               height = 0.6) +
@@ -150,7 +150,7 @@ plot.SVDAnalysis = function(x, ...) {
 #' @importFrom graphics plot
 #' @export
 plot.SVAAnalysis = function(x, ...) {
-  x$limit_significant_PC = x$num_sv
+  x[['limit_significant_PC']] = x[['num_sv']]
   return(plot_significance(x, ...))
 }
 

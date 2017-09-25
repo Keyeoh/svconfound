@@ -49,7 +49,7 @@ sva_analysis = function(values, pdata, main_formula, null_formula = NULL,
 
   svs = sva(values, mod = mod, mod0 = mod0, n.sv = num_sv)
 
-  sv_names = paste0('SV-', 1:(svs$n.sv))
+  sv_names = paste0('SV-', 1:(svs[['n.sv']]))
   sv_names = factor(sv_names, levels = sv_names)
 
   if (num_sv == 1) {
@@ -58,10 +58,10 @@ sva_analysis = function(values, pdata, main_formula, null_formula = NULL,
             'is not ok, as it does not use the drop=FALSE parameter.',
             'Converting the surrogate variable back to a matrix.')
     )
-    svs$sv = matrix(svs$sv, ncol = 1)
+    svs[['sv']] = matrix(svs[['sv']], ncol = 1)
   }
 
-  significance_data = compute_significance_data(svs$sv, pdata, sv_names)
+  significance_data = compute_significance_data(svs[['sv']], pdata, sv_names)
 
   sig_data_rgset = NULL
 
@@ -70,20 +70,20 @@ sva_analysis = function(values, pdata, main_formula, null_formula = NULL,
     var_names = colnames(data_control_values)
     names(var_names) = var_names
     sig_data_rgset = compute_significance_data_var_names(
-      svs$sv,
+      svs[['sv']],
       data_control_values,
       sv_names,
       var_names
     )
     significance_data = rbind(significance_data, sig_data_rgset)
 
-    significance_data$Variable = factor(
-      significance_data$Variable,
-      levels = unique(significance_data$Variable)
+    significance_data[['Variable']] = factor(
+      significance_data[['Variable']],
+      levels = unique(significance_data[['Variable']])
     )
   }
 
-  colnames(svs$sv) = gsub('-', '_', sv_names)
+  colnames(svs[['sv']]) = gsub('-', '_', sv_names)
 
   result = list(
     num_sv = num_sv,
@@ -91,7 +91,7 @@ sva_analysis = function(values, pdata, main_formula, null_formula = NULL,
     mod = mod,
     significance = significance_data,
     significance_control = sig_data_rgset,
-    surrogates = svs$sv
+    surrogates = svs[['sv']]
   )
 
   class(result) = append(class(result), 'SVAAnalysis')
