@@ -31,5 +31,6 @@ Suggests:
   IlluminaHumanMethylation450kmanifest,
   testthat,
   knitr,
+  limma,
   rmarkdown
 VignetteBuilder: knitr
