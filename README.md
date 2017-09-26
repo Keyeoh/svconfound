@@ -2,7 +2,7 @@
 
 ### A simple SVD/SVA confounding analysis framework
 
-[![Build Status](https://travis-ci.org/keyeoh/svconfound.svg?branch=master)](https://travis-ci.org/keyeoh/svconfound)
+[![Build Status](https://travis-ci.org/Keyeoh/svconfound.svg?branch=master)](https://travis-ci.org/keyeoh/svconfound)
 [![codecov](https://codecov.io/gh/Keyeoh/svconfound/branch/master/graph/badge.svg?token=EY9U9yrR0S)](https://codecov.io/gh/Keyeoh/svconfound)
 
 This package implements a simple strategy for analyzing confounding variation on
