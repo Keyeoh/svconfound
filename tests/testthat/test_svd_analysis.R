@@ -48,7 +48,7 @@ mock_pdata = data.frame(
 
 test_that('svd_analysis() works on a basic call (scaling)', {
   mock_result = svd_analysis(
-    values = mock_points,
+    values = t(mock_points),
     pdata = mock_pdata,
     center = TRUE,
     scale = TRUE
@@ -97,7 +97,7 @@ mock_rgset = RGChannelSet(
 
 test_that('svd_analysis() works on a basic call (with RGset)', {
   mock_result = svd_analysis(
-    values = mock_points,
+    values = t(mock_points),
     pdata = mock_pdata,
     center = TRUE,
     scale = TRUE,
