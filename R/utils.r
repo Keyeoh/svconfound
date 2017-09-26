@@ -8,6 +8,7 @@
 #'
 #' @param p_values A numeric containing the p-values
 #' @return A factor containing the resulting categories.
+#' @keywords internal
 cut_pvalues = function(p_values) {
   result = cut(
     p_values,
@@ -30,6 +31,7 @@ cut_pvalues = function(p_values) {
 #' @param fstat A numeric vector of length three obtained from a linear model
 #' fit.
 #' @return The computed p-value.
+#' @keywords internal
 get_p_value = function(fstat) {
   if (is.numeric(fstat['value'])) {
     p_value = 1 - pf(fstat[['value']], fstat[['numdf']], fstat[['dendf']])
@@ -53,6 +55,7 @@ get_p_value = function(fstat) {
 #'
 #' @param pdata A data.frame containing the phenotypical data.
 #' @return A character vector containing the selected variable names.
+#' @keywords internal
 get_var_names = function(pdata) {
   if (!is.data.frame(pdata)) {
     stop('Input must be a data.frame.')
@@ -95,6 +98,7 @@ get_var_names = function(pdata) {
 #' @importFrom dplyr %>% mutate_
 #' @importFrom tidyr gather_
 #' @importFrom stats lm na.omit pf model.matrix kruskal.test
+#' @keywords internal
 compute_significance_data_var_names = function(values, pdata, component_names,
                                                 var_names,
                                                 method = c('lm', 'kruskal')) {
@@ -171,6 +175,7 @@ compute_significance_data_var_names = function(values, pdata, component_names,
 #' @return A data.frame with the results of the association tests.
 #' @importFrom dplyr %>% mutate_
 #' @importFrom tidyr gather_
+#' @keywords internal
 compute_significance_data = function (values, pdata, component_names,
                                       method = c('lm', 'kruskal')) {
   var_names = get_var_names(pdata)
@@ -197,6 +202,7 @@ compute_significance_data = function (values, pdata, component_names,
 #' @importFrom methods is
 #' @importFrom minfi getControlAddress getRed getGreen
 #' @return A matrix with the values of the control elements.
+#' @keywords internal
 get_control_variables = function(rgset) {
   if (!is(rgset, 'RGChannelSet')) {
     stop('Input must be of RGChannelSet type.')
