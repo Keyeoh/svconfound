@@ -46,9 +46,7 @@ variables are measured in different units.
 
 If a RGChannelSet is given, it can also compute the association with the
 control probes. This implementation can use two different methods for testing
-(Linear models and Kruskal-Wallis). It also has an expert mode where the
-association between samples and components can be tested. Please be careful
-when using the latter.
+(Linear models and Kruskal-Wallis).
 
 The number of meaningful components is computed using the function
 \code{EstDimRMT} from the package \code{isva}.
