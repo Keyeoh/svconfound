@@ -1,8 +1,8 @@
 Package: svconfound
 Type: Package
 Title: A simple SVD/SVA confounding analysis framework
-Version: 0.2.1
-Date: 2016-02-19
+Version: 0.3.0
+Date: 2017-09-26
 Authors@R: c(
   person("Gustavo", "Fernandez", email = "fernandezgustavo@uniovi.es", 
     role = c("cre", "aut")),
