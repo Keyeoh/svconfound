@@ -14,6 +14,7 @@
 #' every Principal Component.
 #' @importFrom ggplot2 ggplot aes_string geom_line geom_point xlab ylab theme_bw
 #' theme element_text geom_vline
+#' @keywords internal
 plot_svd_scree = function(x) {
   result = ggplot(x[['variance_explained']],
                   aes_string(x = 'PC', y = 'Var')) +
@@ -84,6 +85,7 @@ screeplot.SVAAnalysis = function(x, ...) {
 #' @return A ggplot2 heatmap showing the results of all the association tests.
 #' @importFrom ggplot2 ggplot aes_string geom_tile scale_fill_manual
 #' scale_color_manual xlab theme_bw theme geom_vline scale_x_discrete
+#' @keywords internal
 plot_significance = function(x) {
   colors_palette = c('darkred', 'red', 'orange', 'gold', 'pink', 'transparent')
 

@@ -41,3 +41,4 @@ comparisons.
 
 This function receives variable names as a parameter.
 }
+\keyword{internal}

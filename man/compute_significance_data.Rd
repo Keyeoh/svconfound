@@ -37,3 +37,4 @@ or Surrogate Variable) and every phenotype and control variable. P-values are
 then collected and stored in a \code{tbl_df} object describing all the
 comparisons.
 }
+\keyword{internal}
